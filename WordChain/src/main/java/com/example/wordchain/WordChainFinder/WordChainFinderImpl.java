@@ -1,13 +1,20 @@
-package com.example.wordchain;
+package com.example.wordchain.WordChainFinder;
+
+import com.example.wordchain.WordChainFinder.DictionaryLoader.DictionaryFileLoader;
 
 import java.util.*;
 
-public class WordChainAlgorithmImpl {
-    public List<String> getWordChains(String startWord, String endWord, Set<String> dictionary) {
-        return (List<String>) searchByBreadth(startWord,endWord,dictionary);
+public class WordChainFinderImpl implements WordChainFinder {
+
+    @Override
+    public List<String> findWordChain(String startWord, String endWord) {
+        DictionaryFileLoader dictLoader = new DictionaryFileLoader("/static/wordlist.txt");
+        Set<String> dict = dictLoader.getDictionaryForWord(startWord.length());
+
+        return (List<String>) searchByBreadthAlgorythm(startWord, endWord, dict);
     }
 
-    private Deque<String> searchByBreadth(String startWord, String endWord, Set<String> dict) {
+    private Deque<String> searchByBreadthAlgorythm(String startWord, String endWord, Set<String> dict) {
         Queue<String> toVisit = new LinkedList<>();
         Set<String> visited = new HashSet<>();
         Map<String, String> parents = new HashMap<>();
@@ -22,9 +29,9 @@ public class WordChainAlgorithmImpl {
 
             visited.add(currentNode);
 
-            getChildren(currentNode,dict).stream().filter(children->!visited.contains(children)).forEach(children->{
+            getChildren(currentNode, dict).stream().filter(children -> !visited.contains(children)).forEach(children -> {
                 toVisit.add(children);
-                parents.putIfAbsent(children,currentNode);
+                parents.putIfAbsent(children, currentNode);
             });
         }
 
@@ -53,10 +60,10 @@ public class WordChainAlgorithmImpl {
         return set;
     }
 
-    private Integer wordDifference(String firstWord , String secondWord) {
+    private Integer wordDifference(String firstWord, String secondWord) {
         int difference = 0;
-        for(int i=0; i<firstWord.length();i++)
-            if(firstWord.charAt(i)!= secondWord.charAt(i)) difference++;
+        for (int i = 0; i < firstWord.length(); i++)
+            if (firstWord.charAt(i) != secondWord.charAt(i)) difference++;
         return difference;
     }
 }

@@ -1,8 +1,8 @@
 package com.example.wordchain;
 
+import com.example.wordchain.WordChainFinder.WordChainFinderImpl;
 import org.springframework.stereotype.Service;
 
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -12,21 +12,17 @@ public class WordChainService {
     }
 
     public String findWordChain(String startWord, String endWord) {
-        DictionaryFileLoader dictionaryFileLoader = new DictionaryFileLoader("/static/wordlist.txt");
-        Set<String> dict = dictionaryFileLoader.getDictionary(startWord.length());
-
         String chain = null;
 
-        WordChainAlgorithmImpl wci = new WordChainAlgorithmImpl();
+        WordChainFinderImpl wordChainFinder = new WordChainFinderImpl();
         try {
-            chain = wci.getWordChains(startWord, endWord,dict)
+            chain = wordChainFinder.findWordChain(startWord, endWord)
                     .stream()
                     .collect(Collectors.joining(" -> "));
         } catch (IllegalArgumentException e) {
             System.out.println("[ERROR] " + e.getMessage());
         }
-        System.out.println("TEST "+startWord+" "+endWord);
-        String result = "THE RESULT IS: \n"+(chain.isEmpty() ? "No word chain found" : chain);
+        String result = "THE RESULT IS: \n" + (chain.isEmpty() ? "No word chain found" : chain);
 
         return result;
     }

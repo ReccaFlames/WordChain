@@ -18,7 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-public class WordchainApplicationTests {
+public class WordChainApplicationTests {
 
     @Autowired
     private MockMvc mockMvc;
