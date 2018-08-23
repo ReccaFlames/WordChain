@@ -23,7 +23,6 @@ public class WordChainApplicationTests {
     @Autowired
     private MockMvc mockMvc;
 
-
     @Test
     public void shouldReturnDefaultMessage() throws Exception {
         this.mockMvc.perform(get("/greeting")).andDo(print()).andExpect(status().isOk())
