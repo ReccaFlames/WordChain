@@ -8,7 +8,11 @@ public class WordChainFinderImpl implements WordChainFinder {
 
     @Override
     public List<String> findWordChain(String startWord, String endWord) {
+        ensureWordIsNotEmpty(startWord);
+        ensureWordIsNotEmpty(endWord);
         ensureInput(startWord, endWord);
+        startWord = startWord.trim().toLowerCase();
+        endWord = endWord.trim().toLowerCase();
 
         DictionaryFileLoader dictLoader = new DictionaryFileLoader("/static/wordlist.txt");
         Set<String> dict = dictLoader.getDictionaryForWord(startWord.length());
@@ -78,8 +82,6 @@ public class WordChainFinderImpl implements WordChainFinder {
     }
 
     private void ensureInput(String startWord, String endWord) {
-        ensureWordIsNotEmpty(startWord);
-        ensureWordIsNotEmpty(endWord);
         ensureSameLength(startWord, endWord);
         ensureIsAlpha(startWord);
         ensureIsAlpha(endWord);
@@ -92,7 +94,7 @@ public class WordChainFinderImpl implements WordChainFinder {
     }
 
     private void ensureWordIsNotEmpty(String word) {
-        if (word.equals("") || word.length() == 0) {
+        if (word == null || word.equals("") || word.length() == 0) {
             throw new IllegalArgumentException("Input word(s) cannot be null or empty");
         }
     }
