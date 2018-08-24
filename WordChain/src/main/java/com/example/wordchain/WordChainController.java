@@ -15,13 +15,9 @@ public class WordChainController {
         this.service = service;
     }
 
-    @RequestMapping("/greeting")
-    public @ResponseBody String greeting() {
-        return service.greet();
-    }
-
     @RequestMapping(value = "/wordChain", method = RequestMethod.GET)
-    public @ResponseBody String getWordChain(@RequestParam String startWord, @RequestParam String endWord) {
-        return service.findWordChain(startWord,endWord);
+    public @ResponseBody
+    String getWordChain(@RequestParam String startWord, @RequestParam String endWord) {
+        return service.findWordChain(startWord, endWord);
     }
 }

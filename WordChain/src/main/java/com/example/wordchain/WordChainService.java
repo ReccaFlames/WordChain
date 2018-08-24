@@ -7,12 +7,9 @@ import java.util.stream.Collectors;
 
 @Service
 public class WordChainService {
-    public String greet() {
-        return "Hello World";
-    }
 
     public String findWordChain(String startWord, String endWord) {
-        String chain = null;
+        String chain;
 
         WordChainFinderImpl wordChainFinder = new WordChainFinderImpl();
         try {
@@ -20,10 +17,11 @@ public class WordChainService {
                     .stream()
                     .collect(Collectors.joining(" -> "));
         } catch (IllegalArgumentException e) {
-            System.out.println("[ERROR] " + e.getMessage());
+            return e.getMessage();
         }
         String result = "THE RESULT IS: \n" + (chain.isEmpty() ? "No word chain found" : chain);
 
         return result;
     }
+
 }
