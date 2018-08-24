@@ -26,18 +26,6 @@ public class WebMockTest {
     private WordChainService service;
 
     @Test
-    public void greetingShouldReturnMessageFromService() throws Exception {
-        when(service.greet()).thenReturn("Hello Mock");
-        this.mockMvc.perform(get("/greeting")).andDo(print()).andExpect(status().isOk())
-                .andExpect(content().string(containsString("Hello Mock")));
-    }
-
-    @Test
-    public void wordChainWhenNoParamShouldReturnBadRequest() throws Exception {
-        this.mockMvc.perform(get("/wordChain")).andExpect(status().isBadRequest());
-    }
-
-    @Test
     public void wordChainWhenParamsCorrectShouldReturnResultFromService() throws Exception{
         String startWord = "cat";
         String endWord = "dog";

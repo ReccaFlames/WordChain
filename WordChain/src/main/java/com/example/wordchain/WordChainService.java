@@ -7,9 +7,6 @@ import java.util.stream.Collectors;
 
 @Service
 public class WordChainService {
-    public String greet() {
-        return "Hello World";
-    }
 
     public String findWordChain(String startWord, String endWord) {
         String chain;
