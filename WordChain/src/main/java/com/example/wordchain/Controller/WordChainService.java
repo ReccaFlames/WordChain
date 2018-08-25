@@ -1,27 +1,21 @@
 package com.example.wordchain.Controller;
 
+import com.example.wordchain.Model.WordChain;
 import com.example.wordchain.WordChainFinder.WordChainFinderImpl;
 import org.springframework.stereotype.Service;
 
-import java.util.stream.Collectors;
+import java.util.concurrent.atomic.AtomicLong;
 
 @Service
 public class WordChainService {
 
-    public String findWordChain(String startWord, String endWord) {
-        String chain;
+    private final AtomicLong counter = new AtomicLong();
 
+    public WordChain findWordChain(String startWord, String endWord) {
         WordChainFinderImpl wordChainFinder = new WordChainFinderImpl();
-        try {
-            chain = wordChainFinder.findWordChain(startWord, endWord)
-                    .stream()
-                    .collect(Collectors.joining(" -> "));
-        } catch (IllegalArgumentException e) {
-            return e.getMessage();
-        }
-        String result = (chain.isEmpty() ? "No word chain found" : chain);
+        String[] chain = wordChainFinder.findWordChain(startWord, endWord).toArray(new String[0]);
 
-        return result;
+        return new WordChain(counter.incrementAndGet(), startWord, endWord, chain);
     }
 
 }

@@ -1,10 +1,10 @@
 package com.example.wordchain.Controller;
 
+import com.example.wordchain.Model.WordChain;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class WordChainController {
@@ -17,7 +17,15 @@ public class WordChainController {
 
     @RequestMapping(value = "/wordChain", method = RequestMethod.GET)
     public @ResponseBody
-    String getWordChain(@RequestParam String startWord, @RequestParam String endWord) {
-        return service.findWordChain(startWord, endWord);
+    ResponseEntity getWordChain(@RequestParam String startWord, @RequestParam String endWord) {
+        WordChain wordChain = service.findWordChain(startWord, endWord);
+        return ResponseEntity.ok(wordChain);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public @ResponseBody
+    ResponseEntity handleException(IllegalArgumentException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 }
