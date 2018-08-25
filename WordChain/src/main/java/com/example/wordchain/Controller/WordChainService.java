@@ -1,4 +1,4 @@
-package com.example.wordchain;
+package com.example.wordchain.Controller;
 
 import com.example.wordchain.WordChainFinder.WordChainFinderImpl;
 import org.springframework.stereotype.Service;
@@ -19,7 +19,7 @@ public class WordChainService {
         } catch (IllegalArgumentException e) {
             return e.getMessage();
         }
-        String result = "THE RESULT IS: \n" + (chain.isEmpty() ? "No word chain found" : chain);
+        String result = (chain.isEmpty() ? "No word chain found" : chain);
 
         return result;
     }

@@ -1,4 +1,4 @@
-package com.example.wordchain;
+package com.example.wordchain.Controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
