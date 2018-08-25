@@ -44,6 +44,6 @@ public class WordChainApplicationTests {
         this.mockMvc.perform(get("/wordChain")
                 .param("startWord", startWord)
                 .param("endWord", endWord))
-                .andExpect(status().isOk());
+                .andExpect(status().isBadRequest());
     }
 }
