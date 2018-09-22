@@ -1,7 +1,7 @@
 package com.example.wordchain.WordChainFinder;
 
-import java.util.List;
+import java.util.Deque;
 
 public interface WordChainFinder {
-    List<String> findWordChain(String startWord, String endWord);
+    Deque<String> findWordChain(String startWord, String endWord);
 }

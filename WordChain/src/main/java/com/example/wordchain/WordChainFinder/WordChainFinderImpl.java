@@ -3,11 +3,12 @@ package com.example.wordchain.WordChainFinder;
 import com.example.wordchain.WordChainFinder.DictionaryLoader.DictionaryFileLoader;
 
 import java.util.*;
+import java.util.stream.Collector;
 
 public class WordChainFinderImpl implements WordChainFinder {
 
     @Override
-    public List<String> findWordChain(String startWord, String endWord) {
+    public Deque<String> findWordChain(String startWord, String endWord) {
         ensureWordIsNotEmpty(startWord);
         ensureWordIsNotEmpty(endWord);
         ensureInput(startWord, endWord);
@@ -18,7 +19,7 @@ public class WordChainFinderImpl implements WordChainFinder {
         Set<String> dict = dictLoader.getDictionaryForWord(startWord.length());
 
         if (containsWordsInDictionary(startWord, endWord, dict)) {
-            return (List<String>) searchByBreadthAlgorithm(startWord, endWord, dict);
+            return bidirectionalSearchAlgorithm(startWord, endWord, dict);
         }
 
         return new LinkedList<>();
@@ -28,28 +29,56 @@ public class WordChainFinderImpl implements WordChainFinder {
         return dict.contains(first) && dict.contains(second);
     }
 
-    private Deque<String> searchByBreadthAlgorithm(String startWord, String endWord, Set<String> dict) {
-        Queue<String> toVisit = new LinkedList<>();
-        Set<String> visited = new HashSet<>();
-        Map<String, String> parents = new HashMap<>();
+    private Deque<String> bidirectionalSearchAlgorithm(String startWord, String endWord, Set<String> dict) {
+        Queue<String> beginQueue = new LinkedList<>();
+        Queue<String> endQueue = new LinkedList<>();
+        Map<String, String> beginParents = new HashMap<>();
+        Map<String, String> endParents = new HashMap<>();
 
-        toVisit.add(startWord);
+        beginQueue.add(startWord);
+        endQueue.add(endWord);
 
-        while (!toVisit.isEmpty()) {
-            String currentNode = toVisit.poll();
-            if (currentNode.equals(endWord)) {
-                return backtrack(currentNode, parents);
+        Set<String> visitedBegin = new HashSet<>();
+        Set<String> visitedEnd = new HashSet<>();
+
+        while (!beginQueue.isEmpty() || !endQueue.isEmpty()) {
+            String currentNode = beginQueue.poll();
+
+            if (endQueue.contains(currentNode)) {
+                return getPath(endParents, beginParents, currentNode);
             }
 
-            visited.add(currentNode);
+            visitedBegin.add(currentNode);
 
-            getChildren(currentNode, dict).stream().filter(children -> !visited.contains(children)).forEach(children -> {
-                toVisit.add(children);
-                parents.putIfAbsent(children, currentNode);
+            getChildren(currentNode, dict).stream().filter(children -> !visitedBegin.contains(children)).forEach(children -> {
+                beginQueue.add(children);
+                beginParents.putIfAbsent(children, currentNode);
             });
+
+            String currentNode2 = endQueue.poll();
+
+            visitedEnd.add(currentNode2);
+
+            getChildren(currentNode2, dict).stream().filter(children -> !visitedEnd.contains(children)).forEach(children -> {
+                endQueue.add(children);
+                endParents.putIfAbsent(children, currentNode2);
+            });
+
         }
 
         return new LinkedList<>();
+    }
+
+    private Deque<String> getPath(Map<String, String> endParents, Map<String, String> beginParents, String currentNode) {
+        Deque<String> endDeque = backtrack(currentNode, endParents);
+        endDeque.removeFirst();
+        Deque<String> startDeque = backtrack(currentNode, beginParents);
+        endDeque.stream().forEach(element -> startDeque.addFirst(element));
+
+        return startDeque.stream().collect(Collector.of(ArrayDeque::new, (deq, t) -> deq.addFirst(t), (d1, d2) -> {
+            d2.addAll(d1);
+            return d2;
+        }));
     }
 
     private Deque<String> backtrack(String lastNode, Map<String, String> parents) {
@@ -57,7 +86,7 @@ public class WordChainFinderImpl implements WordChainFinder {
 
         String currentNode = lastNode;
         do {
-            path.push(currentNode);
+            path.add(currentNode);
             currentNode = parents.get(currentNode);
         } while (currentNode != null);
 
@@ -103,7 +132,7 @@ public class WordChainFinderImpl implements WordChainFinder {
         char[] chars = word.toCharArray();
 
         for (char c : chars) {
-            if(!Character.isLetter(c)) {
+            if (!Character.isLetter(c)) {
                 throw new IllegalArgumentException("Words can contain only letters");
             }
         }
