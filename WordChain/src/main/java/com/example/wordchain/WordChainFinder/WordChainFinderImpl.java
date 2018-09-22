@@ -50,19 +50,23 @@ public class WordChainFinderImpl implements WordChainFinder {
 
             visitedBegin.add(currentNode);
 
-            getChildren(currentNode, dict).stream().filter(children -> !visitedBegin.contains(children)).forEach(children -> {
-                beginQueue.add(children);
-                beginParents.putIfAbsent(children, currentNode);
-            });
+            for (String s : getChildren(currentNode, dict)) {
+                if (!visitedBegin.contains(s)) {
+                    beginQueue.add(s);
+                    beginParents.putIfAbsent(s, currentNode);
+                }
+            }
 
             String currentNode2 = endQueue.poll();
 
             visitedEnd.add(currentNode2);
 
-            getChildren(currentNode2, dict).stream().filter(children -> !visitedEnd.contains(children)).forEach(children -> {
-                endQueue.add(children);
-                endParents.putIfAbsent(children, currentNode2);
-            });
+            for (String children : getChildren(currentNode2, dict)) {
+                if (!visitedEnd.contains(children)) {
+                    endQueue.add(children);
+                    endParents.putIfAbsent(children, currentNode2);
+                }
+            }
 
         }
 
