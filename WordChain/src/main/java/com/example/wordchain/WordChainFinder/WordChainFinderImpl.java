@@ -44,9 +44,8 @@ public class WordChainFinderImpl implements WordChainFinder {
         while (!beginQueue.isEmpty() || !endQueue.isEmpty()) {
             String currentNode = beginQueue.poll();
 
-            if (endQueue.contains(currentNode)) {
-                return getPath(endParents, beginParents, currentNode);
-            }
+            if(currentNode.equals(endWord))
+                return backtrack(currentNode,beginParents);
 
             visitedBegin.add(currentNode);
 
@@ -68,6 +67,9 @@ public class WordChainFinderImpl implements WordChainFinder {
                 }
             }
 
+            if (endQueue.contains(currentNode)) {
+                return getPath(endParents, beginParents, currentNode);
+            }
         }
 
         return new LinkedList<>();

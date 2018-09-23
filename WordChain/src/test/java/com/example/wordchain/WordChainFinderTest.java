@@ -1,16 +1,30 @@
 package com.example.wordchain;
 
 import com.example.wordchain.WordChainFinder.WordChainFinderImpl;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.ArrayDeque;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class WordChainFinderTest {
 
-    private WordChainFinderImpl wordChainFinder = new WordChainFinderImpl();
+    private WordChainFinderImpl wordChainFinder;
+    private ArrayDeque<String> expected;
+
+    @Before
+    public void setUp()
+    {
+        wordChainFinder = new WordChainFinderImpl();
+        expected = new ArrayDeque<>();
+    }
 
     @Test(expected = IllegalArgumentException.class)
     public void NumberAsStartWordShouldReturnException() {
@@ -67,39 +81,54 @@ public class WordChainFinderTest {
         wordChainFinder.findWordChain("//cat", "h!or2");
     }
 
-//    @Test
-//    public void fromCatToDogShouldReturnResult() {
-//        List<String> result = Stream.of("cat", "cot", "cog", "dog").collect(Collectors.toList());
-//        assertEquals(wordChainFinder.findWordChain("cat", "dog"), result);
-//    }
-//
-//    @Test
-//    public void alchemistShouldReturnResult() {
-//        List<String> result = Stream.of("lead", "load", "goad", "gold").collect(Collectors.toList());
-//        assertEquals(wordChainFinder.findWordChain("lead", "gold"), result);
-//    }
-//
-//    @Test
-//    public void programmerShouldReturnResult() {
-//        List<String> result = Stream.of("ruby", "roby", "robe", "rode", "code").collect(Collectors.toList());
-//        assertEquals(wordChainFinder.findWordChain("ruby", "code"), result);
-//    }
-//
-//    @Test
-//    public void UpperCaseShouldReturnResult() {
-//        List<String> result = Stream.of("cat", "cot", "cog", "dog").collect(Collectors.toList());
-//        assertEquals(wordChainFinder.findWordChain("CAT", "DOG"), result);
-//    }
-//
-//    @Test
-//    public void TwoEqualWordsShouldReturnResult() {
-//        List<String> result = Stream.of("cat").collect(Collectors.toList());
-//        assertEquals(wordChainFinder.findWordChain("cat", "cat"), result);
-//    }
-//
-//    @Test
-//    public void OneMoveShouldReturnResult() {
-//        List<String> result = Stream.of("cat", "cot").collect(Collectors.toList());
-//        assertEquals(wordChainFinder.findWordChain("cat", "cot"), result);
-//    }
+    @Test
+    public void fromCatToDogShouldReturnResult() {
+        expected.add("cat");
+        expected.add("cot");
+        expected.add("cog");
+        expected.add("dog");
+
+        assertTrue(wordChainFinder.findWordChain("cat", "dog").stream().allMatch(e->expected.contains(e)));
+    }
+
+    @Test
+    public void alchemistShouldReturnResult() {
+        expected.add("lead");
+        expected.add("load");
+        expected.add("goad");
+        expected.add("gold");
+
+        assertTrue(wordChainFinder.findWordChain("lead", "gold").stream().allMatch(e->expected.contains(e)));
+    }
+
+    @Test
+    public void programmerShouldReturnResult() {
+        expected.add("ruby");
+        expected.add("roby");
+        expected.add("robe");
+        expected.add("rode");
+        expected.add("code");
+
+        assertTrue(wordChainFinder.findWordChain("ruby", "code").stream().allMatch(e->expected.contains(e)));
+    }
+
+    @Test
+    public void UpperCaseShouldReturnResult() {
+        expected.add("cat");
+        expected.add("cot");
+        expected.add("cog");
+        expected.add("dog");
+
+        assertTrue(wordChainFinder.findWordChain("CAT", "DOG").stream().allMatch(e->expected.contains(e)));
+    }
+
+    @Test
+    public void TwoEqualWordsShouldReturnResult() {
+        assertEquals(1, wordChainFinder.findWordChain("cat", "cat").size());
+    }
+
+    @Test
+    public void OneMoveShouldReturnResult() {
+        assertEquals(2, wordChainFinder.findWordChain("cat", "cot").size());
+    }
 }
