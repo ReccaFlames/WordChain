@@ -82,7 +82,7 @@ public class WordChainFinderImpl implements WordChainFinder {
         Deque<String> endDeque = backtrack(currentNode, endParents);
         endDeque.removeFirst();
         Deque<String> startDeque = backtrack(currentNode, beginParents);
-        endDeque.stream().forEach(element -> startDeque.addFirst(element));
+        endDeque.stream().forEach(startDeque::addFirst);
 
         return startDeque.stream().collect(Collector.of(ArrayDeque::new, (deq, t) -> deq.addFirst(t), (d1, d2) -> {
             d2.addAll(d1);
