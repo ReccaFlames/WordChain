@@ -16,12 +16,11 @@ import static org.junit.Assert.assertTrue;
 @SpringBootTest
 public class WordChainFinderTest {
 
-    private WordChainFinderImpl wordChainFinder;
+    private WordChainFinderImpl wordChainFinder = new WordChainFinderImpl();
     private ArrayDeque<String> expected;
 
     @Before
     public void setUp() {
-        wordChainFinder = new WordChainFinderImpl();
         expected = new ArrayDeque<>();
     }
 
