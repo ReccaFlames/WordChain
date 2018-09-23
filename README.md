@@ -25,11 +25,9 @@ This task was posted into [codekata](http://codekata.com/kata/kata19-word-chains
 
 ### Approach
 1. Dictionary is loaded into memory
-2. To solve this task [BFS algorithm](https://en.wikipedia.org/wiki/Breadth-first_search) was used.
+2. To solve this task [Bidirectional search](https://en.wikipedia.org/wiki/Bidirectional_search) based on [BFS algorithm](https://en.wikipedia.org/wiki/Breadth-first_search) was used.
 
 ### Solution
 To create this application I decided to use Java Spring MVC. We can get the result by the REST API and also we could use endpoint web site to find path.
 Example of REST API:
 http://localhost:8080/wordChain?startWord=cat&endWord=123
-
-![picture](gui.png)
