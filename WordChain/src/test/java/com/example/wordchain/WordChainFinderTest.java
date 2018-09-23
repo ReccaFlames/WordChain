@@ -20,8 +20,7 @@ public class WordChainFinderTest {
     private ArrayDeque<String> expected;
 
     @Before
-    public void setUp()
-    {
+    public void setUp() {
         wordChainFinder = new WordChainFinderImpl();
         expected = new ArrayDeque<>();
     }
@@ -88,7 +87,7 @@ public class WordChainFinderTest {
         expected.add("cog");
         expected.add("dog");
 
-        assertTrue(wordChainFinder.findWordChain("cat", "dog").stream().allMatch(e->expected.contains(e)));
+        assertTrue(wordChainFinder.findWordChain("cat", "dog").stream().allMatch(e -> expected.contains(e)));
     }
 
     @Test
@@ -98,7 +97,7 @@ public class WordChainFinderTest {
         expected.add("goad");
         expected.add("gold");
 
-        assertTrue(wordChainFinder.findWordChain("lead", "gold").stream().allMatch(e->expected.contains(e)));
+        assertTrue(wordChainFinder.findWordChain("lead", "gold").stream().allMatch(e -> expected.contains(e)));
     }
 
     @Test
@@ -109,7 +108,7 @@ public class WordChainFinderTest {
         expected.add("rode");
         expected.add("code");
 
-        assertTrue(wordChainFinder.findWordChain("ruby", "code").stream().allMatch(e->expected.contains(e)));
+        assertTrue(wordChainFinder.findWordChain("ruby", "code").stream().allMatch(e -> expected.contains(e)));
     }
 
     @Test
@@ -119,7 +118,7 @@ public class WordChainFinderTest {
         expected.add("cog");
         expected.add("dog");
 
-        assertTrue(wordChainFinder.findWordChain("CAT", "DOG").stream().allMatch(e->expected.contains(e)));
+        assertTrue(wordChainFinder.findWordChain("CAT", "DOG").stream().allMatch(e -> expected.contains(e)));
     }
 
     @Test

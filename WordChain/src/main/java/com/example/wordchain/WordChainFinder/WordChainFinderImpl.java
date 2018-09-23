@@ -30,6 +30,12 @@ public class WordChainFinderImpl implements WordChainFinder {
     }
 
     private Deque<String> bidirectionalSearchAlgorithm(String startWord, String endWord, Set<String> dict) {
+        if(startWord.equals(endWord)) {
+            ArrayDeque<String> result = new ArrayDeque<>();
+            result.push(startWord);
+            return  result;
+        }
+
         Queue<String> beginQueue = new LinkedList<>();
         Queue<String> endQueue = new LinkedList<>();
         Map<String, String> beginParents = new HashMap<>();
@@ -43,9 +49,6 @@ public class WordChainFinderImpl implements WordChainFinder {
 
         while (!beginQueue.isEmpty() || !endQueue.isEmpty()) {
             String currentNode = beginQueue.poll();
-
-            if(currentNode.equals(endWord))
-                return backtrack(currentNode,beginParents);
 
             visitedBegin.add(currentNode);
 
